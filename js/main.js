@@ -3,8 +3,31 @@ let hero          = null;
 let currentBattle = null;
 let battleInterval = null;
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     console.log('[main.js] DOMContentLoaded - pradedu registruoti event listener\'us');
+
+    // ── Bandome įkelti paskutinį hero iš serverio ──
+    const lastHeroName = localStorage.getItem('lastHeroName');
+    if (lastHeroName) {
+        console.log('[main.js] Randame lastHeroName:', lastHeroName, '- bandome įkelti');
+        const data = await loadHero(lastHeroName);
+        if (data) {
+            hero = new Hero(data.name, data.heroClass);
+            hero.level = data.level;
+            hero.xp    = data.xp;
+            hero.gold  = data.gold;
+            hero.hp    = data.hp;
+            hero.maxHp = data.maxHp;
+            hero.atk   = data.atk;
+            hero.def   = data.def;
+
+            console.log('[main.js] Hero įkeltas, praleidžiam kūrimo ekraną');
+            document.getElementById('battleLog').innerHTML = '';
+            updateHeroStats(hero);
+            showBattleScreen();
+            spawnEnemy();
+        }
+    }
 
     // ── Klasės pasirinkimas ──
     document.querySelectorAll('input[name="heroClass"]').forEach(r => {
@@ -18,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('heroName').addEventListener('input', validateForm);
 
     // ── "Pradėti nuotykį" mygtukas ──
-    document.getElementById('startBtn').addEventListener('click', () => {
+    document.getElementById('startBtn').addEventListener('click', async () => {
         console.log('[startBtn] Paspaustas');
 
         const name      = document.getElementById('heroName').value.trim();
@@ -30,6 +53,9 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('creationError').textContent = e.message;
             return;
         }
+
+        localStorage.setItem('lastHeroName', hero.name);
+        await saveHero(hero);
 
         document.getElementById('battleLog').innerHTML = '';
         updateHeroStats(hero);
@@ -55,6 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
         hero           = null;
         currentBattle  = null;
 
+        localStorage.removeItem('lastHeroName');
         document.getElementById('heroName').value = '';
         document.querySelectorAll('input[name="heroClass"]').forEach(r => r.checked = false);
         document.getElementById('startBtn').disabled = true;
@@ -134,9 +161,7 @@ function runTurn() {
 }
 
 // ── Kovos pabaiga ──
-function finishBattle(winner) {
-    const enemy = currentBattle.enemy;
-
+async function finishBattle(winner) {
     if (winner === 'hero') {
         const xpGain      = 30 + hero.level * 10;
         const goldGain    = 10 + hero.level * 5;
@@ -157,5 +182,7 @@ function finishBattle(winner) {
     }
 
     updateHeroStats(hero);
+    await saveHero(hero);
+
     setTimeout(spawnEnemy, 2000);
 }
