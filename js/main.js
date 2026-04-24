@@ -101,22 +101,33 @@ function runTurn() {
         return;
     }
 
+    // Fiksuojame HP prieš turą - žalos skaičiavimui
+    const heroPrevHp  = hero.hp;
+    const enemyPrevHp = currentBattle.enemy.hp;
+
     const log = currentBattle.nextTurn();
 
+    const heroDmg  = heroPrevHp - hero.hp;
+    const enemyDmg = enemyPrevHp - currentBattle.enemy.hp;
+
     addBattleLog(`── Turas ${log.turn - 1} ──`, 'turn');
-    log.events.forEach((msg, i) => {
-        addBattleLog(msg, i === 0 ? 'hero' : 'enemy');
-    });
+    log.events.forEach((msg, i) => addBattleLog(msg, i === 0 ? 'hero' : 'enemy'));
 
+    // Canvas efektai
     animateAttack('hero');
-    setTimeout(() => {
-        if (currentBattle && currentBattle.enemy.hp > 0) animateAttack('enemy');
-    }, 500);
+    triggerHitFlash('enemy');
+    spawnDamageNumber('enemy', enemyDmg);
 
-    drawArena(hero, currentBattle.enemy, 'hero');
-    setTimeout(() => {
-        if (currentBattle) drawArena(hero, currentBattle.enemy);
-    }, 200);
+    if (heroDmg > 0) {
+        setTimeout(() => {
+            if (currentBattle) {
+                animateAttack('enemy');
+                triggerHitFlash('hero');
+                spawnDamageNumber('hero', heroDmg);
+                if (heroDmg > hero.maxHp * 0.2) triggerShake(heroDmg);
+            }
+        }, 500);
+    }
 
     updateHeroStats(hero);
     updateEnemyStats(currentBattle.enemy);
@@ -138,12 +149,13 @@ function finishBattle(winner) {
         if (hero.level > levelBefore) {
             addBattleLog(`LEVEL UP! Dabar ${hero.level} lygis!`, 'system');
         }
+        triggerVictory();
     } else {
         addBattleLog(`${hero.name} buvo nugalėtas... Pabandyk dar kartą!`, 'enemy');
         hero.hp = Math.floor(hero.maxHp * 0.3);
+        triggerDefeat();
     }
 
     updateHeroStats(hero);
-    drawArena(hero, enemy);
     setTimeout(spawnEnemy, 2000);
 }
