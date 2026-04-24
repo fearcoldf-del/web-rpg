@@ -73,21 +73,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         battleInterval = setInterval(runTurn, 1500);
     });
 
-    // ── "Naujas herojus" mygtukas ──
+    // ── "Naujas herojus" mygtukas - atnaujina HP ir sukuria naują priešą ──
     document.getElementById('newHeroBtn').addEventListener('click', () => {
-        console.log('[newHeroBtn] Paspaustas');
+        console.log('[newHeroBtn] Paspaustas - atstatome HP, kuriame naują priešą');
         clearInterval(battleInterval);
         battleInterval = null;
-        hero           = null;
-        currentBattle  = null;
 
-        localStorage.removeItem('lastHeroName');
-        document.getElementById('heroName').value = '';
-        document.querySelectorAll('input[name="heroClass"]').forEach(r => r.checked = false);
-        document.getElementById('startBtn').disabled = true;
+        // Išsaugome lygį, XP ir gold - tik atstatome HP
+        hero.hp = hero.maxHp;
+
         document.getElementById('battleLog').innerHTML = '';
-
-        showCreationScreen();
+        updateHeroStats(hero);
+        spawnEnemy();
     });
 
     console.log('[main.js] Visi event listener\'ai užregistruoti');
@@ -163,9 +160,11 @@ function runTurn() {
 
 // ── Kovos pabaiga ──
 async function finishBattle(winner) {
+    const enemy = currentBattle.enemy; // currentBattle scope, ne globalus
+
     if (winner === 'hero') {
-        const xpGain      = enemy.xpReward   ?? (30 + hero.level * 10);
-        const goldGain    = enemy.goldReward  ?? (10 + hero.level * 5);
+        const xpGain      = enemy.xpReward  ?? (30 + hero.level * 10);
+        const goldGain    = enemy.goldReward ?? (10 + hero.level * 5);
         const levelBefore = hero.level;
 
         hero.gainXP(xpGain);
@@ -178,8 +177,8 @@ async function finishBattle(winner) {
         }
         triggerVictory();
     } else {
-        addBattleLog(`${hero.name} buvo nugalėtas... Pabandyk dar kartą!`, 'enemy');
-        hero.hp = Math.floor(hero.maxHp * 0.3);
+        addBattleLog(`${hero.name} buvo nugalėtas... HP atstatytas.`, 'enemy');
+        hero.hp = hero.maxHp; // atstatome pilną HP po pralaimėjimo
         triggerDefeat();
     }
 
