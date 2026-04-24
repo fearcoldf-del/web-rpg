@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web RPG</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Hero kūrimo ekranas -->
+    <div id="creationScreen" class="screen">
+        <div class="creation-container">
+            <h1 class="game-title">⚔ Web RPG ⚔</h1>
+            <p class="subtitle">Pasirink savo kelią</p>
+
+            <div class="form-group">
+                <label for="heroName">Herojaus vardas</label>
+                <input type="text" id="heroName" placeholder="Įveskite vardą..." maxlength="20">
+            </div>
+
+            <div class="class-selection">
+                <p class="class-label">Pasirink klasę</p>
+                <div class="class-cards">
+
+                    <label class="class-card">
+                        <input type="radio" name="heroClass" value="warrior">
+                        <span class="class-name">Warrior</span>
+                        <span class="class-stats">HP: 120 | ATK: 15 | DEF: 10</span>
+                    </label>
+
+                    <label class="class-card">
+                        <input type="radio" name="heroClass" value="mage">
+                        <span class="class-name">Mage</span>
+                        <span class="class-stats">HP: 80 | ATK: 25 | DEF: 5</span>
+                    </label>
+
+                    <label class="class-card">
+                        <input type="radio" name="heroClass" value="archer">
+                        <span class="class-name">Archer</span>
+                        <span class="class-stats">HP: 100 | ATK: 20 | DEF: 7</span>
+                    </label>
+
+                </div>
+            </div>
+
+            <button id="startBtn" class="btn btn-primary" disabled>Pradėti nuotykį</button>
+            <p id="creationError" class="error-msg"></p>
+        </div>
+    </div>
+
+    <!-- Kovos ekranas -->
+    <div id="battleScreen" class="screen hidden">
+        <div class="battle-container">
+            <h2 class="battle-title">⚔ Arena ⚔</h2>
+
+            <div class="combatants">
+
+                <!-- Hero stats -->
+                <div class="combatant-panel" id="heroPanel">
+                    <h3 id="heroName-display">Herojus</h3>
+                    <p class="combatant-class" id="heroClass-display"></p>
+                    <div class="stat-row">
+                        <span>HP</span>
+                        <div class="hp-bar-wrap">
+                            <div class="hp-bar" id="heroHpBar"></div>
+                        </div>
+                        <span id="heroHpText"></span>
+                    </div>
+                    <div class="stat-grid">
+                        <div class="stat-item">⚔ ATK <span id="heroAtk"></span></div>
+                        <div class="stat-item">🛡 DEF <span id="heroDef"></span></div>
+                        <div class="stat-item">⭐ LVL <span id="heroLvl"></span></div>
+                        <div class="stat-item">✨ XP <span id="heroXp"></span></div>
+                    </div>
+                    <div class="gold-row">💰 Gold: <span id="heroGold">0</span></div>
+                </div>
+
+                <!-- Canvas arena -->
+                <div class="arena-panel">
+                    <canvas id="battleCanvas" width="400" height="300"></canvas>
+                </div>
+
+                <!-- Enemy stats -->
+                <div class="combatant-panel" id="enemyPanel">
+                    <h3 id="enemyName-display">Priešas</h3>
+                    <p class="combatant-class" id="enemyLevel-display"></p>
+                    <div class="stat-row">
+                        <span>HP</span>
+                        <div class="hp-bar-wrap">
+                            <div class="hp-bar enemy-hp-bar" id="enemyHpBar"></div>
+                        </div>
+                        <span id="enemyHpText"></span>
+                    </div>
+                    <div class="stat-grid">
+                        <div class="stat-item">⚔ ATK <span id="enemyAtk"></span></div>
+                        <div class="stat-item">🛡 DEF <span id="enemyDef"></span></div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Kovos valdymas -->
+            <div class="battle-controls">
+                <button id="fightBtn" class="btn btn-danger">⚔ Pradėti kovą</button>
+                <button id="newHeroBtn" class="btn btn-secondary">↩ Naujas herojus</button>
+            </div>
+
+            <!-- Kovos žurnalas -->
+            <div class="battle-log-wrap">
+                <h4>Kovos žurnalas</h4>
+                <div id="battleLog" class="battle-log"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="js/hero.js"></script>
+    <script src="js/battle.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

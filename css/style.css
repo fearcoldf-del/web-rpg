@@ -1,0 +1,383 @@
+/* ── Bazė ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+    --bg-deep:    #1a1a2e;
+    --bg-card:    #16213e;
+    --bg-panel:   #0f3460;
+    --gold:       #f0a500;
+    --gold-light: #ffd166;
+    --red:        #e63946;
+    --red-dark:   #9b2226;
+    --text:       #e0e0e0;
+    --text-dim:   #9a9ab0;
+    --border:     #2a2a4a;
+    --radius:     8px;
+}
+
+body {
+    background-color: var(--bg-deep);
+    color: var(--text);
+    font-family: 'Cinzel', serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image:
+        radial-gradient(ellipse at 20% 50%, rgba(15, 52, 96, 0.3) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(240, 165, 0, 0.05) 0%, transparent 50%);
+}
+
+.screen { width: 100%; display: flex; justify-content: center; padding: 2rem 1rem; }
+.hidden { display: none !important; }
+
+/* ── Tipografija ── */
+.game-title {
+    font-size: 2.8rem;
+    color: var(--gold);
+    text-align: center;
+    letter-spacing: 4px;
+    text-shadow: 0 0 20px rgba(240, 165, 0, 0.5);
+    margin-bottom: 0.4rem;
+}
+
+.subtitle {
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    letter-spacing: 3px;
+    margin-bottom: 2.5rem;
+    text-transform: uppercase;
+}
+
+/* ── Hero kūrimo ekranas ── */
+.creation-container {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 780px;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
+}
+
+.form-group { margin-bottom: 2rem; }
+
+.form-group label {
+    display: block;
+    color: var(--gold);
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+}
+
+.form-group input {
+    width: 100%;
+    background: var(--bg-deep);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus { border-color: var(--gold); }
+.form-group input::placeholder { color: var(--text-dim); }
+
+/* ── Klasių kortelės ── */
+.class-label {
+    color: var(--gold);
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+}
+
+.class-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.class-card {
+    background: var(--bg-deep);
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.class-card input[type="radio"] { display: none; }
+
+.class-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(240, 165, 0, 0.15);
+}
+
+.class-card:has(input:checked) {
+    border-color: var(--gold);
+    background: rgba(240, 165, 0, 0.08);
+    box-shadow: 0 0 16px rgba(240, 165, 0, 0.25);
+}
+
+.class-name {
+    color: var(--gold);
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+}
+
+.class-card .class-stats {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    font-family: sans-serif;
+}
+
+/* ── Mygtukai ── */
+.btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.95rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border: none;
+    border-radius: var(--radius);
+    padding: 0.8rem 2rem;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.2s, opacity 0.2s;
+}
+
+.btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--gold), #c8860a);
+    color: #1a1a2e;
+    font-weight: 700;
+    width: 100%;
+}
+
+.btn-primary:not(:disabled):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(240, 165, 0, 0.4);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, var(--red), var(--red-dark));
+    color: #fff;
+    font-weight: 600;
+}
+
+.btn-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(230, 57, 70, 0.4);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+}
+
+.btn-secondary:hover { border-color: var(--text-dim); color: var(--text); }
+
+.error-msg { color: var(--red); font-size: 0.8rem; text-align: center; margin-top: 0.75rem; min-height: 1.2em; }
+
+/* ── Kovos ekranas ── */
+.battle-container {
+    width: 100%;
+    max-width: 1000px;
+}
+
+.battle-title {
+    color: var(--gold);
+    text-align: center;
+    font-size: 1.8rem;
+    letter-spacing: 6px;
+    margin-bottom: 1.5rem;
+    text-shadow: 0 0 16px rgba(240, 165, 0, 0.4);
+}
+
+.combatants {
+    display: grid;
+    grid-template-columns: 220px 1fr 220px;
+    gap: 1rem;
+    align-items: start;
+    margin-bottom: 1.25rem;
+}
+
+/* ── Žaidėjo / priešo paneliai ── */
+.combatant-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+}
+
+.combatant-panel h3 {
+    color: var(--gold);
+    font-size: 1rem;
+    letter-spacing: 1px;
+    margin-bottom: 0.2rem;
+}
+
+.combatant-class {
+    color: var(--text-dim);
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 0.9rem;
+}
+
+/* HP baras */
+.stat-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    margin-bottom: 0.9rem;
+}
+
+.hp-bar-wrap {
+    flex: 1;
+    background: #2a0a0a;
+    border-radius: 4px;
+    height: 10px;
+    overflow: hidden;
+    border: 1px solid var(--red-dark);
+}
+
+.hp-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--red-dark), var(--red));
+    border-radius: 4px;
+    transition: width 0.4s ease;
+    width: 100%;
+}
+
+.enemy-hp-bar {
+    background: linear-gradient(90deg, #7b0d1e, #c9184a);
+}
+
+/* Stat tinklelis */
+.stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.4rem;
+    margin-bottom: 0.75rem;
+}
+
+.stat-item {
+    background: var(--bg-deep);
+    border-radius: 4px;
+    padding: 0.35rem 0.5rem;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    display: flex;
+    justify-content: space-between;
+}
+
+.stat-item span { color: var(--text); font-weight: 600; }
+
+.gold-row {
+    font-size: 0.8rem;
+    color: var(--gold-light);
+    letter-spacing: 1px;
+}
+
+/* ── Canvas arena ── */
+.arena-panel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#battleCanvas {
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    background: #0d0d1a;
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+}
+
+/* ── Valdymas ── */
+.battle-controls {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+}
+
+/* ── Kovos žurnalas ── */
+.battle-log-wrap {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
+}
+
+.battle-log-wrap h4 {
+    color: var(--gold);
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+}
+
+.battle-log {
+    height: 150px;
+    overflow-y: auto;
+    font-family: sans-serif;
+    font-size: 0.82rem;
+    line-height: 1.7;
+    color: var(--text-dim);
+}
+
+.battle-log::-webkit-scrollbar { width: 4px; }
+.battle-log::-webkit-scrollbar-track { background: var(--bg-deep); }
+.battle-log::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.log-hero   { color: #90e0ef; }
+.log-enemy  { color: #ff6b6b; }
+.log-system { color: var(--gold); font-style: italic; }
+.log-turn   { color: var(--text-dim); font-size: 0.72rem; border-top: 1px solid var(--border); margin: 0.3rem 0; padding-top: 0.3rem; }
+
+/* ── Atakos animacija ── */
+@keyframes shake {
+    0%   { transform: translateX(0); }
+    20%  { transform: translateX(-6px); }
+    40%  { transform: translateX(6px); }
+    60%  { transform: translateX(-4px); }
+    80%  { transform: translateX(4px); }
+    100% { transform: translateX(0); }
+}
+
+.attacking {
+    animation: shake 0.4s ease;
+    border-color: var(--gold) !important;
+    box-shadow: 0 0 16px rgba(240, 165, 0, 0.4);
+}
+
+/* ── Responsive ── */
+@media (max-width: 700px) {
+    .class-cards { grid-template-columns: 1fr; }
+
+    .combatants {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+    }
+
+    .arena-panel { order: -1; }
+    .game-title  { font-size: 2rem; }
+}
