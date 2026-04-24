@@ -114,7 +114,8 @@ function spawnEnemy() {
     document.getElementById('fightBtn').textContent = '⚔ Pradėti kovą';
     document.getElementById('fightBtn').disabled    = false;
 
-    addBattleLog(`─── Naujas priešas: ${enemy.name} (lygis ${enemy.level}) ───`, 'system');
+    const bossWarn = enemy.isBoss ? ' ⚠ BOSAS!' : '';
+    addBattleLog(`─── ${enemy.emoji ?? ''} ${enemy.name} (lygis ${enemy.level})${bossWarn} ───`, 'system');
 }
 
 // ── Kovos turas ──
@@ -134,16 +135,16 @@ function runTurn() {
 
     const log = currentBattle.nextTurn();
 
+    addBattleLog(`── Turas ${log.turn - 1} ──`, 'turn');
+    log.events.forEach(e => addBattleLog(e.message, e.side === 'hero' ? 'hero' : 'enemy'));
+
     const heroDmg  = heroPrevHp - hero.hp;
     const enemyDmg = enemyPrevHp - currentBattle.enemy.hp;
-
-    addBattleLog(`── Turas ${log.turn - 1} ──`, 'turn');
-    log.events.forEach((msg, i) => addBattleLog(msg, i === 0 ? 'hero' : 'enemy'));
 
     // Canvas efektai
     animateAttack('hero');
     triggerHitFlash('enemy');
-    spawnDamageNumber('enemy', enemyDmg);
+    if (enemyDmg > 0) spawnDamageNumber('enemy', enemyDmg);
 
     if (heroDmg > 0) {
         setTimeout(() => {
@@ -163,14 +164,15 @@ function runTurn() {
 // ── Kovos pabaiga ──
 async function finishBattle(winner) {
     if (winner === 'hero') {
-        const xpGain      = 30 + hero.level * 10;
-        const goldGain    = 10 + hero.level * 5;
+        const xpGain      = enemy.xpReward   ?? (30 + hero.level * 10);
+        const goldGain    = enemy.goldReward  ?? (10 + hero.level * 5);
         const levelBefore = hero.level;
 
         hero.gainXP(xpGain);
         hero.gold += goldGain;
 
-        addBattleLog(`Pergalė! Gavote ${xpGain} XP ir ${goldGain} gold.`, 'system');
+        const bossTag = enemy.isBoss ? ' 🐉 BOSAS NUGALĖTAS!' : '';
+        addBattleLog(`Pergalė!${bossTag} Gavote ${xpGain} XP ir ${goldGain} gold.`, 'system');
         if (hero.level > levelBefore) {
             addBattleLog(`LEVEL UP! Dabar ${hero.level} lygis!`, 'system');
         }
