@@ -510,6 +510,54 @@ body {
     color: var(--gold-light);
 }
 
+/* ── Lyderlentelė ── */
+.lb-body { padding-bottom: 0.5rem; }
+
+.lb-loading, .lb-empty {
+    text-align: center;
+    color: var(--text-dim);
+    font-family: sans-serif;
+    font-size: 0.85rem;
+    padding: 1.5rem 0;
+}
+
+.lb-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+}
+
+.lb-table thead th {
+    color: var(--gold);
+    font-size: 0.72rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 0.4rem 0.6rem;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+}
+
+.lb-table tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+}
+
+.lb-table tbody tr:hover { background: rgba(255,255,255,0.03); }
+
+.lb-table td {
+    padding: 0.55rem 0.6rem;
+    color: var(--text-dim);
+    font-family: sans-serif;
+}
+
+.lb-rank { font-size: 1rem; width: 2rem; }
+.lb-name { color: var(--text); font-family: 'Cinzel', serif; font-size: 0.78rem; }
+.lb-level, .lb-gold { white-space: nowrap; }
+
+/* Dabartinis žaidėjas */
+.lb-row--current td { color: var(--gold-light) !important; }
+.lb-row--current { background: rgba(240, 165, 0, 0.07) !important; }
+
 /* ── Atakos animacija ── */
 @keyframes shake {
     0%   { transform: translateX(0); }

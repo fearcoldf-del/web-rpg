@@ -73,6 +73,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         battleInterval = setInterval(runTurn, 1500);
     });
 
+    // ── Lyderlentelės mygtukas ──
+    document.getElementById('lbBtn').addEventListener('click', async () => {
+        document.getElementById('lbContent').innerHTML = '<p class="lb-loading">Kraunama...</p>';
+        document.getElementById('lbModal').classList.remove('hidden');
+
+        const players = await fetchLeaderboard();
+        document.getElementById('lbContent').innerHTML =
+            getLeaderboardHTML(players, hero?.name);
+    });
+
+    document.getElementById('lbCloseBtn').addEventListener('click', () => {
+        document.getElementById('lbModal').classList.add('hidden');
+    });
+
     // ── Shop mygtukas ──
     document.getElementById('shopBtn').addEventListener('click', () => {
         openShop();

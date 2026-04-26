@@ -36,6 +36,14 @@ app.post('/api/hero', (req, res) => {
     res.status(201).json({ message: 'Hero išsaugotas', hero: heroes[name.toLowerCase()] });
 });
 
+// GET /api/leaderboard - top 10 žaidėjų pagal lygį, tada gold
+app.get('/api/leaderboard', (req, res) => {
+    const sorted = Object.values(heroes)
+        .sort((a, b) => b.level - a.level || b.gold - a.gold)
+        .slice(0, 10);
+    res.json(sorted);
+});
+
 app.listen(PORT, () => {
     console.log(`Web RPG serveris veikia: http://localhost:${PORT}`);
     console.log(`Health check: http://localhost:${PORT}/api/health`);

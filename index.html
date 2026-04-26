@@ -107,6 +107,7 @@
             <div class="battle-controls">
                 <button id="fightBtn" class="btn btn-danger">⚔ Pradėti kovą</button>
                 <button id="shopBtn" class="btn btn-gold">🛒 Parduotuvė</button>
+                <button id="lbBtn" class="btn btn-secondary">🏆 Lyderiai</button>
                 <button id="newHeroBtn" class="btn btn-secondary">↩ Naujas herojus</button>
             </div>
 
@@ -116,6 +117,19 @@
                 <div id="battleLog" class="battle-log"></div>
             </div>
 
+        </div>
+    </div>
+
+    <!-- Lyderlentelės modal -->
+    <div id="lbModal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>🏆 Lyderlentelė</h2>
+                <button id="lbCloseBtn" class="modal-close">✕</button>
+            </div>
+            <div id="lbContent" class="modal-body lb-body">
+                <p class="lb-loading">Kraunama...</p>
+            </div>
         </div>
     </div>
 
@@ -136,6 +150,7 @@
     <script src="js/ui.js"></script>
     <script src="js/api.js"></script>
     <script src="js/shop.js"></script>
+    <script src="js/leaderboard.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>
