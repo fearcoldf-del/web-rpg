@@ -106,6 +106,7 @@
             <!-- Kovos valdymas -->
             <div class="battle-controls">
                 <button id="fightBtn" class="btn btn-danger">⚔ Pradėti kovą</button>
+                <button id="shopBtn" class="btn btn-gold">🛒 Parduotuvė</button>
                 <button id="newHeroBtn" class="btn btn-secondary">↩ Naujas herojus</button>
             </div>
 
@@ -118,10 +119,23 @@
         </div>
     </div>
 
+    <!-- Shop modal -->
+    <div id="shopModal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>🛒 Parduotuvė</h2>
+                <button id="shopCloseBtn" class="modal-close">✕</button>
+            </div>
+            <div id="shopContent" class="modal-body"></div>
+            <p id="shopMessage" class="shop-message"></p>
+        </div>
+    </div>
+
     <script src="js/hero.js"></script>
     <script src="js/battle.js"></script>
     <script src="js/ui.js"></script>
     <script src="js/api.js"></script>
+    <script src="js/shop.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

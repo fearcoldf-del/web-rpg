@@ -73,6 +73,34 @@ document.addEventListener('DOMContentLoaded', async () => {
         battleInterval = setInterval(runTurn, 1500);
     });
 
+    // ── Shop mygtukas ──
+    document.getElementById('shopBtn').addEventListener('click', () => {
+        openShop();
+    });
+
+    document.getElementById('shopCloseBtn').addEventListener('click', () => {
+        document.getElementById('shopModal').classList.add('hidden');
+    });
+
+    // Pirkimo mygtukai (event delegation ant modal'o)
+    document.getElementById('shopContent').addEventListener('click', async (e) => {
+        const btn = e.target.closest('[data-item]');
+        if (!btn || btn.disabled) return;
+
+        const itemId = btn.dataset.item;
+        const result = buyItem(hero, itemId);
+
+        document.getElementById('shopMessage').textContent = result.message;
+        document.getElementById('shopMessage').style.color = result.success ? '#ffd166' : '#e63946';
+
+        if (result.success) {
+            updateHeroStats(hero);
+            await saveHero(hero);
+            // Atnaujina shop UI su nauju gold kiekiu
+            document.getElementById('shopContent').innerHTML = getShopHTML(hero);
+        }
+    });
+
     // ── "Naujas herojus" mygtukas - atnaujina HP ir sukuria naują priešą ──
     document.getElementById('newHeroBtn').addEventListener('click', () => {
         console.log('[newHeroBtn] Paspaustas - atstatome HP, kuriame naują priešą');
@@ -89,6 +117,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     console.log('[main.js] Visi event listener\'ai užregistruoti');
 });
+
+// ── Shop pagalbinė funkcija ──
+function openShop() {
+    document.getElementById('shopMessage').textContent = '';
+    document.getElementById('shopContent').innerHTML = getShopHTML(hero);
+    document.getElementById('shopModal').classList.remove('hidden');
+}
 
 // ── Formos validacija ──
 function validateForm() {

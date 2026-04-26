@@ -363,6 +363,153 @@ body {
 .log-system { color: var(--gold); font-style: italic; }
 .log-turn   { color: var(--text-dim); font-size: 0.72rem; border-top: 1px solid var(--border); margin: 0.3rem 0; padding-top: 0.3rem; }
 
+/* ── Shop mygtukas ── */
+.btn-gold {
+    background: linear-gradient(135deg, #b8860b, var(--gold));
+    color: #1a1a2e;
+    font-weight: 700;
+}
+
+.btn-gold:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(240, 165, 0, 0.4);
+}
+
+/* ── Modal ── */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.modal {
+    background: var(--bg-card);
+    border: 1px solid var(--gold);
+    border-radius: var(--radius);
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 0 40px rgba(240, 165, 0, 0.2);
+    overflow: hidden;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.modal-header h2 {
+    color: var(--gold);
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    transition: color 0.2s;
+}
+
+.modal-close:hover { color: var(--text); }
+
+.modal-body { padding: 1rem 1.25rem; }
+
+/* ── Shop turinys ── */
+.shop-gold-bar {
+    font-size: 0.9rem;
+    color: var(--gold-light);
+    margin-bottom: 1rem;
+    letter-spacing: 1px;
+}
+
+.shop-list { display: flex; flex-direction: column; gap: 0.6rem; }
+
+.shop-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--bg-deep);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.75rem 1rem;
+    transition: border-color 0.2s;
+}
+
+.shop-item:hover { border-color: var(--gold); }
+
+.shop-item--poor { opacity: 0.5; }
+
+.shop-emoji { font-size: 1.6rem; flex-shrink: 0; }
+
+.shop-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.shop-name {
+    font-size: 0.85rem;
+    color: var(--text);
+    letter-spacing: 0.5px;
+}
+
+.shop-desc {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    font-family: sans-serif;
+}
+
+.shop-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.35rem;
+}
+
+.shop-cost {
+    font-size: 0.8rem;
+    color: var(--gold-light);
+    white-space: nowrap;
+}
+
+.btn-shop {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    background: linear-gradient(135deg, #b8860b, var(--gold));
+    color: #1a1a2e;
+    font-weight: 700;
+    border: none;
+    border-radius: 4px;
+    padding: 0.3rem 0.75rem;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+}
+
+.btn-shop:hover:not(:disabled) { transform: translateY(-1px); opacity: 0.9; }
+.btn-shop:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.shop-message {
+    min-height: 1.4em;
+    font-size: 0.82rem;
+    font-family: sans-serif;
+    text-align: center;
+    padding: 0.5rem 1.25rem 0.75rem;
+    color: var(--gold-light);
+}
+
 /* ── Atakos animacija ── */
 @keyframes shake {
     0%   { transform: translateX(0); }
