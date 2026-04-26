@@ -108,6 +108,7 @@
                 <button id="fightBtn" class="btn btn-danger">⚔ Pradėti kovą</button>
                 <button id="shopBtn" class="btn btn-gold">🛒 Parduotuvė</button>
                 <button id="lbBtn" class="btn btn-secondary">🏆 Lyderiai</button>
+                <button id="guildBtn" class="btn btn-secondary">⚔️ Gildija</button>
                 <button id="newHeroBtn" class="btn btn-secondary">↩ Naujas herojus</button>
             </div>
 
@@ -117,6 +118,17 @@
                 <div id="battleLog" class="battle-log"></div>
             </div>
 
+        </div>
+    </div>
+
+    <!-- Gildijų modal -->
+    <div id="guildModal" class="modal-overlay hidden">
+        <div class="modal modal--wide">
+            <div class="modal-header">
+                <h2>⚔️ Gildijos</h2>
+                <button id="guildCloseBtn" class="modal-close">✕</button>
+            </div>
+            <div id="guildContent" class="modal-body"></div>
         </div>
     </div>
 
@@ -151,6 +163,7 @@
     <script src="js/api.js"></script>
     <script src="js/shop.js"></script>
     <script src="js/leaderboard.js"></script>
+    <script src="js/guild.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

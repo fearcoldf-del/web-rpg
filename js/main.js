@@ -73,6 +73,47 @@ document.addEventListener('DOMContentLoaded', async () => {
         battleInterval = setInterval(runTurn, 1500);
     });
 
+    // ── Gildijų mygtukas ──
+    document.getElementById('guildBtn').addEventListener('click', () => openGuildModal());
+
+    document.getElementById('guildCloseBtn').addEventListener('click', () => {
+        document.getElementById('guildModal').classList.add('hidden');
+    });
+
+    // Pirkimo/prisijungimo ir kūrimo eventai (delegation ant modal turinio)
+    document.getElementById('guildContent').addEventListener('click', async (e) => {
+        // Prisijungimas prie gildijos
+        const joinBtn = e.target.closest('.guild-join-btn');
+        if (joinBtn) {
+            const guildId = joinBtn.dataset.guildId;
+            const result  = await joinGuild(guildId, hero.name);
+            if (result) {
+                hero.guildId = guildId;
+                await saveHero(hero);
+                openGuildModal();
+            }
+            return;
+        }
+
+        // Gildijos kūrimas
+        if (e.target.id === 'guildCreateBtn') {
+            const name = document.getElementById('guildNameInput').value.trim();
+            const desc = document.getElementById('guildDescInput').value.trim();
+            const msg  = document.getElementById('guildMessage');
+
+            if (!name) { msg.textContent = 'Įveskite gildijos pavadinimą.'; return; }
+
+            const result = await createGuild(name, desc, hero.name);
+            if (result) {
+                hero.guildId = result.id;
+                await saveHero(hero);
+                openGuildModal();
+            } else {
+                msg.textContent = 'Nepavyko sukurti gildijos.';
+            }
+        }
+    });
+
     // ── Lyderlentelės mygtukas ──
     document.getElementById('lbBtn').addEventListener('click', async () => {
         document.getElementById('lbContent').innerHTML = '<p class="lb-loading">Kraunama...</p>';
@@ -131,6 +172,21 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     console.log('[main.js] Visi event listener\'ai užregistruoti');
 });
+
+// ── Gildijų modal pagalbinė funkcija ──
+async function openGuildModal() {
+    document.getElementById('guildModal').classList.remove('hidden');
+    document.getElementById('guildContent').innerHTML = '<p class="lb-loading">Kraunama...</p>';
+
+    const guilds = await fetchGuilds();
+    if (guilds === null) {
+        document.getElementById('guildContent').innerHTML =
+            '<p class="lb-empty">Nepavyko prisijungti prie serverio.</p>';
+        return;
+    }
+    document.getElementById('guildContent').innerHTML =
+        getGuildsHTML(guilds, hero?.guildId);
+}
 
 // ── Shop pagalbinė funkcija ──
 function openShop() {

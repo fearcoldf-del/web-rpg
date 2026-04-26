@@ -16,6 +16,7 @@ async function saveHero(hero) {
                 maxHp:     hero.maxHp,
                 atk:       hero.atk,
                 def:       hero.def,
+                guildId:   hero.guildId ?? null,
             }),
         });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);

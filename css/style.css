@@ -510,6 +510,104 @@ body {
     color: var(--gold-light);
 }
 
+/* ── Gildijos ── */
+.modal--wide { max-width: 560px; }
+
+.guild-list { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 0.5rem; }
+
+.guild-empty {
+    text-align: center;
+    color: var(--text-dim);
+    font-family: sans-serif;
+    font-size: 0.85rem;
+    padding: 1rem 0;
+}
+
+.guild-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    background: var(--bg-deep);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.75rem 1rem;
+    transition: border-color 0.2s;
+}
+
+.guild-item:hover { border-color: var(--gold); }
+
+.guild-item--mine {
+    border-color: var(--gold);
+    background: rgba(240, 165, 0, 0.06);
+}
+
+.guild-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    flex: 1;
+}
+
+.guild-name {
+    font-size: 0.9rem;
+    color: var(--text);
+    letter-spacing: 0.5px;
+}
+
+.guild-badge {
+    font-size: 0.7rem;
+    color: var(--gold);
+    font-family: sans-serif;
+}
+
+.guild-desc {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    font-family: sans-serif;
+}
+
+.guild-meta {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    font-family: sans-serif;
+    margin-top: 0.1rem;
+}
+
+.guild-join-btn { flex-shrink: 0; }
+
+.guild-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 1rem 0;
+}
+
+.guild-create { display: flex; flex-direction: column; gap: 0.5rem; }
+
+.guild-create-title {
+    font-size: 0.8rem;
+    color: var(--gold);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.guild-input {
+    background: var(--bg-deep);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: sans-serif;
+    font-size: 0.85rem;
+    padding: 0.6rem 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.guild-input:focus { border-color: var(--gold); }
+.guild-input::placeholder { color: var(--text-dim); }
+
+.guild-create-btn { margin-top: 0.25rem; }
+
 /* ── Lyderlentelė ── */
 .lb-body { padding-bottom: 0.5rem; }
 
