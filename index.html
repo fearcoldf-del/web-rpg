@@ -109,6 +109,10 @@
                 <button id="shopBtn" class="btn btn-gold">🛒 Parduotuvė</button>
                 <button id="lbBtn" class="btn btn-secondary">🏆 Lyderiai</button>
                 <button id="guildBtn" class="btn btn-secondary">⚔️ Gildija</button>
+                <div class="pvp-btn-wrap">
+                    <button id="pvpBtn" class="btn btn-secondary">⚔️ PvP</button>
+                    <span id="pvpBadge" class="pvp-badge hidden">0</span>
+                </div>
                 <button id="newHeroBtn" class="btn btn-secondary">↩ Naujas herojus</button>
             </div>
 
@@ -118,6 +122,17 @@
                 <div id="battleLog" class="battle-log"></div>
             </div>
 
+        </div>
+    </div>
+
+    <!-- PvP modal -->
+    <div id="pvpModal" class="modal-overlay hidden">
+        <div class="modal modal--wide">
+            <div class="modal-header">
+                <h2>⚔️ PvP Arena</h2>
+                <button id="pvpCloseBtn" class="modal-close">✕</button>
+            </div>
+            <div id="pvpContent" class="modal-body pvp-modal-body"></div>
         </div>
     </div>
 
@@ -164,6 +179,7 @@
     <script src="js/shop.js"></script>
     <script src="js/leaderboard.js"></script>
     <script src="js/guild.js"></script>
+    <script src="js/pvp.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

@@ -1,7 +1,8 @@
 // ── Žaidimo būsena ──
-let hero          = null;
-let currentBattle = null;
+let hero           = null;
+let currentBattle  = null;
 let battleInterval = null;
+let pvpPollInterval = null; // PvP iššūkių tikrinimo intervalas
 
 document.addEventListener('DOMContentLoaded', async () => {
     console.log('[main.js] DOMContentLoaded - pradedu registruoti event listener\'us');
@@ -26,6 +27,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             updateHeroStats(hero);
             showBattleScreen();
             spawnEnemy();
+            startPvPPolling();
         }
     }
 
@@ -61,6 +63,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         updateHeroStats(hero);
         showBattleScreen();
         spawnEnemy();
+        startPvPPolling();
     });
 
     // ── "Pradėti kovą" mygtukas ──
@@ -156,6 +159,81 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
+    // ── PvP mygtukas ──
+    document.getElementById('pvpBtn').addEventListener('click', () => openPvPModal());
+
+    document.getElementById('pvpCloseBtn').addEventListener('click', () => {
+        document.getElementById('pvpModal').classList.add('hidden');
+    });
+
+    // PvP veiksmai (event delegation ant modal turinio)
+    document.getElementById('pvpContent').addEventListener('click', async (e) => {
+        const msg = document.getElementById('pvpMessage');
+
+        // Iššūkti žaidėją
+        const challengeBtn = e.target.closest('.pvp-challenge-btn');
+        if (challengeBtn) {
+            const targetName = challengeBtn.dataset.target;
+            challengeBtn.disabled = true;
+            const result = await challengePlayer(hero.name, targetName);
+            if (result) {
+                if (msg) {
+                    msg.textContent  = `⚔️ Iššūkis išsiųstas žaidėjui ${targetName}!`;
+                    msg.style.color  = '#ffd166';
+                }
+            } else {
+                if (msg) {
+                    msg.textContent = 'Nepavyko išsiųsti iššūkio.';
+                    msg.style.color = '#e63946';
+                }
+                challengeBtn.disabled = false;
+            }
+            return;
+        }
+
+        // Priimti iššūkį
+        const acceptBtn = e.target.closest('.pvp-accept-btn');
+        if (acceptBtn) {
+            const matchId = acceptBtn.dataset.matchId;
+            acceptBtn.disabled = true;
+            const result = await acceptChallenge(matchId);
+            if (result) {
+                const won = result.winner.toLowerCase() === hero.name.toLowerCase();
+                if (won) {
+                    // Pridedam XP ir gold nugalėtojui
+                    hero.gainXP(result.xpGained);
+                    hero.gold += result.goldGained;
+                    await saveHero(hero);
+                    updateHeroStats(hero);
+                    addBattleLog(`⚔️ PvP pergalė! Prieš ${result.loser}. +${result.xpGained} XP, +${result.goldGained} 💰`, 'system');
+                } else {
+                    addBattleLog(`⚔️ PvP pralaimėjimas. ${result.winner} buvo stipresnis.`, 'enemy');
+                }
+                // Atnaujiname badge ir modal
+                await checkPvPChallenges();
+                openPvPModal();
+            } else {
+                if (msg) {
+                    msg.textContent = 'Klaida priimant iššūkį.';
+                    msg.style.color = '#e63946';
+                }
+                acceptBtn.disabled = false;
+            }
+            return;
+        }
+
+        // Atmesti iššūkį
+        const declineBtn = e.target.closest('.pvp-decline-btn');
+        if (declineBtn) {
+            const matchId = declineBtn.dataset.matchId;
+            declineBtn.disabled = true;
+            await declineChallenge(matchId);
+            await checkPvPChallenges();
+            openPvPModal();
+            return;
+        }
+    });
+
     // ── "Naujas herojus" mygtukas - atnaujina HP ir sukuria naują priešą ──
     document.getElementById('newHeroBtn').addEventListener('click', () => {
         console.log('[newHeroBtn] Paspaustas - atstatome HP, kuriame naują priešą');
@@ -172,6 +250,47 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     console.log('[main.js] Visi event listener\'ai užregistruoti');
 });
+
+// ── PvP pagalbinės funkcijos ──
+
+// Pradeda kas 30s tikrinti naujus iššūkius
+function startPvPPolling() {
+    if (pvpPollInterval) return;
+    checkPvPChallenges(); // tikrina iškart paleidus
+    pvpPollInterval = setInterval(checkPvPChallenges, 30000);
+}
+
+// Tikrina ar yra naujų iššūkių - atnaujina badge ant mygtuko
+async function checkPvPChallenges() {
+    if (!hero) return;
+    const challenges = await fetchChallenges(hero.name);
+    const count      = challenges.length;
+    const badge      = document.getElementById('pvpBadge');
+    if (!badge) return;
+
+    if (count > 0) {
+        badge.textContent = count;
+        badge.classList.remove('hidden');
+    } else {
+        badge.classList.add('hidden');
+    }
+}
+
+// Atidaro PvP modal ir užkrauna visus duomenis
+async function openPvPModal() {
+    document.getElementById('pvpModal').classList.remove('hidden');
+    document.getElementById('pvpContent').innerHTML = '<p class="lb-loading">Kraunama...</p>';
+
+    // Lygiagretūs užklausai
+    const [challenges, results, allHeroes] = await Promise.all([
+        fetchChallenges(hero.name),
+        fetchPvPResults(hero.name),
+        fetchAllHeroes(),
+    ]);
+
+    document.getElementById('pvpContent').innerHTML =
+        getPvPHTML(challenges, results, allHeroes, hero.name);
+}
 
 // ── Gildijų modal pagalbinė funkcija ──
 async function openGuildModal() {

@@ -672,6 +672,185 @@ body {
     box-shadow: 0 0 16px rgba(240, 165, 0, 0.4);
 }
 
+/* ── PvP sistema ── */
+
+/* Mygtuko wrapper su badge */
+.pvp-btn-wrap {
+    position: relative;
+    display: inline-flex;
+}
+
+.pvp-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: var(--red);
+    color: #fff;
+    font-family: sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    pointer-events: none;
+    box-shadow: 0 0 8px rgba(230, 57, 70, 0.7);
+    animation: badge-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes badge-pulse {
+    0%, 100% { box-shadow: 0 0 8px rgba(230, 57, 70, 0.7); }
+    50%       { box-shadow: 0 0 16px rgba(230, 57, 70, 1); }
+}
+
+/* Modal vidus su scroll */
+.pvp-modal-body {
+    max-height: 70vh;
+    overflow-y: auto;
+    padding-bottom: 0.5rem;
+}
+
+.pvp-modal-body::-webkit-scrollbar { width: 4px; }
+.pvp-modal-body::-webkit-scrollbar-track { background: var(--bg-deep); }
+.pvp-modal-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* Skyriai */
+.pvp-section { margin-bottom: 0.25rem; }
+
+.pvp-section-title {
+    font-size: 0.8rem;
+    color: var(--gold);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+}
+
+.pvp-count {
+    color: var(--red);
+    font-size: 0.85rem;
+}
+
+.pvp-empty {
+    text-align: center;
+    color: var(--text-dim);
+    font-family: sans-serif;
+    font-size: 0.82rem;
+    padding: 0.75rem 0;
+}
+
+/* Žaidėjų sąrašas */
+.pvp-player-list,
+.pvp-challenges-list,
+.pvp-results-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.pvp-player-item,
+.pvp-challenge-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    background: var(--bg-deep);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.65rem 1rem;
+    transition: border-color 0.2s;
+}
+
+.pvp-player-item:hover,
+.pvp-challenge-item:hover { border-color: var(--gold); }
+
+.pvp-player-info,
+.pvp-challenge-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    flex: 1;
+}
+
+.pvp-player-name {
+    font-size: 0.88rem;
+    color: var(--text);
+    letter-spacing: 0.5px;
+}
+
+.pvp-player-meta {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    font-family: sans-serif;
+}
+
+/* Iššūkio veiksmai */
+.pvp-challenge-actions {
+    display: flex;
+    gap: 0.4rem;
+    flex-shrink: 0;
+}
+
+/* Atmetimo mygtukas */
+.btn-pvp-decline {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    background: transparent;
+    color: var(--red);
+    border: 1px solid var(--red-dark);
+    border-radius: 4px;
+    padding: 0.3rem 0.75rem;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.btn-pvp-decline:hover { background: var(--red-dark); color: #fff; }
+.btn-pvp-decline:disabled { opacity: 0.35; cursor: not-allowed; }
+
+/* Kovų rezultatai */
+.pvp-result-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: var(--bg-deep);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.6rem 1rem;
+    font-family: sans-serif;
+    font-size: 0.78rem;
+    flex-wrap: wrap;
+}
+
+.pvp-result--win  { border-color: #2d6a4f; background: rgba(45, 106, 79, 0.1); }
+.pvp-result--loss { border-color: #6b0000; background: rgba(107, 0, 0, 0.1); }
+
+.pvp-result-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    white-space: nowrap;
+}
+
+.pvp-result--win  .pvp-result-badge { color: #52b788; }
+.pvp-result--loss .pvp-result-badge { color: #ff6b6b; }
+
+.pvp-result-vs    { color: var(--text); flex: 1; }
+.pvp-result-reward { color: var(--gold-light); white-space: nowrap; }
+.pvp-result-time  { color: var(--text-dim); font-size: 0.7rem; white-space: nowrap; }
+
+/* Pranešimas modal viršuje */
+.pvp-message {
+    min-height: 1.4em;
+    font-size: 0.82rem;
+    font-family: sans-serif;
+    text-align: center;
+    color: var(--gold-light);
+    margin-bottom: 0.5rem;
+}
+
 /* ── Responsive ── */
 @media (max-width: 700px) {
     .class-cards { grid-template-columns: 1fr; }
