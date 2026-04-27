@@ -17,12 +17,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             hero.level = data.level;
             hero.xp    = data.xp;
             hero.gold  = data.gold;
-            hero.hp    = data.hp;
+            hero.hp    = data.hp;   // išsaugoti HP, NE maxHp
             hero.maxHp = data.maxHp;
             hero.atk   = data.atk;
             hero.def   = data.def;
 
             console.log('[main.js] Hero įkeltas, praleidžiam kūrimo ekraną');
+            console.log('HP prieš spawn (įkeliant iš serverio):', hero.hp, '/', hero.maxHp);
             document.getElementById('battleLog').innerHTML = '';
             updateHeroStats(hero);
             showBattleScreen();
@@ -62,6 +63,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('battleLog').innerHTML = '';
         updateHeroStats(hero);
         showBattleScreen();
+        console.log('HP prieš spawn (naujas herojus, kūrimas):', hero.hp, '/', hero.maxHp);
         spawnEnemy();
         startPvPPolling();
     });
@@ -240,11 +242,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         clearInterval(battleInterval);
         battleInterval = null;
 
-        // Išsaugome lygį, XP ir gold - tik atstatome HP
+        // Išsaugome lygį, XP ir gold - tik atstatome HP (LEISTINAS reset)
         hero.hp = hero.maxHp;
 
         document.getElementById('battleLog').innerHTML = '';
         updateHeroStats(hero);
+        console.log('HP prieš spawn (Naujas herojus mygtukas):', hero.hp, '/', hero.maxHp);
         spawnEnemy();
     });
 
@@ -400,14 +403,25 @@ async function finishBattle(winner) {
             addBattleLog(`LEVEL UP! Dabar ${hero.level} lygis!`, 'system');
         }
         triggerVictory();
+
+        updateHeroStats(hero);
+        await saveHero(hero);
+
+        // Po pergalės - automatiškai sukuriamas naujas priešas
+        setTimeout(() => {
+            console.log('HP prieš spawn (po pergalės):', hero.hp, '/', hero.maxHp);
+            spawnEnemy();
+        }, 2000);
+
     } else {
-        addBattleLog(`${hero.name} buvo nugalėtas... HP atstatytas.`, 'enemy');
-        hero.hp = hero.maxHp; // atstatome pilną HP po pralaimėjimo
+        // BUGFIX: HP NERESETINAMAS - žaidėjas pats turi spausti "Naujas herojus"
+        // Pašalinta: hero.hp = hero.maxHp
+        addBattleLog(`${hero.name} buvo nugalėtas! HP: ${hero.hp}/${hero.maxHp}. Spausk ↩ Naujas herojus.`, 'enemy');
         triggerDefeat();
+
+        console.log('HP po pralaimėjimo (išsaugomas toks koks yra):', hero.hp, '/', hero.maxHp);
+        updateHeroStats(hero);
+        await saveHero(hero);
+        // Po pralaimėjimo - NE automatiškai. Žaidėjas turi spausti "Naujas herojus"
     }
-
-    updateHeroStats(hero);
-    await saveHero(hero);
-
-    setTimeout(spawnEnemy, 2000);
 }
